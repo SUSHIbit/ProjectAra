@@ -25,6 +25,10 @@
                             <x-nav-link :href="route('employee.customer-service')" :active="request()->routeIs('employee.customer-service')">
                                 {{ __('Customer Service') }}
                             </x-nav-link>
+
+                            <x-nav-link :href="route('employee.services')" :active="request()->routeIs('employee.services*')">
+                                {{ __('Services') }}
+                            </x-nav-link>
                         @endif
                         
                         @if (Auth::user()->isManager())
@@ -46,6 +50,10 @@
                             
                             <x-nav-link :href="route('manager.employees')" :active="request()->routeIs('manager.employees*')">
                                 {{ __('Employees') }}
+                            </x-nav-link>
+
+                            <x-nav-link :href="route('manager.services')" :active="request()->routeIs('manager.services*')">
+                                {{ __('Services') }}
                             </x-nav-link>
                             
                             <div class="hidden sm:flex sm:items-center sm:ml-6">
@@ -148,6 +156,10 @@
                     <x-responsive-nav-link :href="route('employee.customer-service')" :active="request()->routeIs('employee.customer-service')">
                         {{ __('Customer Service') }}
                     </x-responsive-nav-link>
+
+                    <x-responsive-nav-link :href="route('employee.services')" :active="request()->routeIs('employee.services*')">
+                        {{ __('Services') }}
+                    </x-responsive-nav-link>
                 @endif
                 
                 @if (Auth::user()->isManager())
@@ -169,6 +181,10 @@
                     
                     <x-responsive-nav-link :href="route('manager.employees')" :active="request()->routeIs('manager.employees*')">
                         {{ __('Employees') }}
+                    </x-responsive-nav-link>
+
+                    <x-responsive-nav-link :href="route('manager.services')" :active="request()->routeIs('manager.services*')">
+                        {{ __('Services') }}
                     </x-responsive-nav-link>
                     
                     <x-responsive-nav-link :href="route('manager.sales-daily')" :active="request()->routeIs('manager.sales-daily')">

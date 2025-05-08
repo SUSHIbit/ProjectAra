@@ -5,10 +5,12 @@ use App\Http\Controllers\BenefitController;
 use App\Http\Controllers\ClockController;
 use App\Http\Controllers\CustomerServiceController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EmployeeServiceController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -58,6 +60,12 @@ Route::middleware(['auth', 'role:employee,manager'])->prefix('employee')->group(
     Route::post('/payment/{serviceRecord}', [PaymentController::class, 'processPayment'])->name('employee.payment.process');
     Route::get('/receipt/{payment}', [PaymentController::class, 'generateReceipt'])->name('employee.receipt');
     Route::get('/receipt/{payment}/pdf', [PaymentController::class, 'downloadReceiptPdf'])->name('employee.receipt.pdf');
+    
+    // New service selection and payment routes
+    Route::get('/services', [EmployeeServiceController::class, 'selectService'])->name('employee.services');
+    Route::post('/services/process', [EmployeeServiceController::class, 'processSelectedServices'])->name('employee.services.process');
+    Route::get('/payment', [EmployeeServiceController::class, 'showPaymentPage'])->name('employee.payment');
+    Route::post('/payment/process', [EmployeeServiceController::class, 'processPayment'])->name('employee.payment.process');
 });
 
 // Manager routes
@@ -91,6 +99,14 @@ Route::middleware(['auth', 'role:manager'])->prefix('manager')->group(function (
     Route::get('/employees', [UserController::class, 'employees'])->name('manager.employees');
     Route::get('/employees/{user}/qr', [UserController::class, 'qrForm'])->name('manager.employees.qr-form');
     Route::post('/employees/{user}/qr', [UserController::class, 'uploadQr'])->name('manager.employees.upload-qr');
+    
+    // Service management
+    Route::get('/services', [ServiceController::class, 'index'])->name('manager.services');
+    Route::get('/services/create', [ServiceController::class, 'create'])->name('manager.services.create');
+    Route::post('/services', [ServiceController::class, 'store'])->name('manager.services.store');
+    Route::get('/services/{service}/edit', [ServiceController::class, 'edit'])->name('manager.services.edit');
+    Route::put('/services/{service}', [ServiceController::class, 'update'])->name('manager.services.update');
+    Route::delete('/services/{service}', [ServiceController::class, 'destroy'])->name('manager.services.destroy');
 });
 
 require __DIR__.'/auth.php';

@@ -6,6 +6,7 @@ use App\Models\ClockRecord;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ClockController extends Controller
 {
@@ -18,10 +19,10 @@ class ClockController extends Controller
             return back()->with('error', 'You are already clocked in.');
         }
         
-        // Create new clock record
+        // Create new clock record with KL timezone
         $clockRecord = ClockRecord::create([
             'user_id' => $user->id,
-            'clock_in' => now(),
+            'clock_in' => Carbon::now('Asia/Kuala_Lumpur'),
         ]);
         
         return back()->with('success', 'Clock in successful at ' . $clockRecord->clock_in->format('H:i'));
@@ -38,7 +39,7 @@ class ClockController extends Controller
         
         // Get the latest active clock record
         $clockRecord = $user->getLatestClockRecord();
-        $clockRecord->clock_out = now();
+        $clockRecord->clock_out = Carbon::now('Asia/Kuala_Lumpur');
         $clockRecord->total_minutes = $clockRecord->calculateTotalMinutes();
         $clockRecord->save();
         
