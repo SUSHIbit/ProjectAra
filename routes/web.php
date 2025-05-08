@@ -65,6 +65,8 @@ Route::middleware(['auth', 'role:employee,manager'])->prefix('employee')->group(
     Route::get('/services', [EmployeeServiceController::class, 'selectService'])->name('employee.services');
     Route::post('/services/process', [EmployeeServiceController::class, 'processSelectedServices'])->name('employee.services.process');
     Route::get('/payment', [EmployeeServiceController::class, 'showPaymentPage'])->name('employee.payment');
+    
+    // Add or fix this route for processing payments
     Route::post('/payment/process', [EmployeeServiceController::class, 'processPayment'])->name('employee.payment.process');
 });
 

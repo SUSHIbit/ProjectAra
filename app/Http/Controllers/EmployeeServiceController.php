@@ -64,10 +64,9 @@ class EmployeeServiceController extends Controller
         $employee = $request->user();
         $serviceRecords = [];
         
-        // Create a customer for the transaction
         // In a real app, you'd have a customer selection step
-        // For simplicity, we'll use a default customer
-        $customerId = 4; // Example customer ID (update accordingly)
+        // For now, we'll use the customer from session or a default
+        $customerId = session('customer_id', 4); // Default to customer ID 4 if not set
         
         foreach ($selectedServices as $service) {
             $serviceRecord = ServiceRecord::create([
@@ -81,18 +80,20 @@ class EmployeeServiceController extends Controller
             $serviceRecords[] = $serviceRecord;
         }
         
-        // Create a payment record
+        // Create a payment record linked to the first service record
+        // In a real system, you might have a more complex relationship for multiple services
         $payment = Payment::create([
-            'service_record_id' => $serviceRecords[0]->id, // Link to the first service record
+            'service_record_id' => $serviceRecords[0]->id,
             'amount' => $totalAmount,
             'payment_method' => $request->payment_method,
             'status' => 'completed',
             'transaction_id' => 'TXN-' . Str::random(10),
         ]);
         
-        // Clear the session
+        // Clear the session data for services and total
         session()->forget(['selected_services', 'total_amount']);
         
+        // Redirect to the receipt page with success message
         return redirect()->route('employee.receipt', $payment->id)
             ->with('success', 'Payment processed successfully.');
     }

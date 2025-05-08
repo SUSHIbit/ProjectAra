@@ -77,6 +77,9 @@
                                 </div>
                             </div>
                             
+                            <!-- Make sure a default payment method is selected even if JavaScript fails -->
+                            <input type="hidden" name="payment_method" value="card">
+                            
                             <div id="qr-code-display" class="mt-6 hidden">
                                 <h4 class="text-md font-medium text-gray-700 mb-2">QR Code</h4>
                                 @if($employee->qr_code_path)
@@ -124,8 +127,12 @@
             const qrCodeDisplay = document.getElementById('qr-code-display');
             if (show) {
                 qrCodeDisplay.classList.remove('hidden');
+                // Ensure the proper payment method is set when showing QR code
+                document.getElementById('payment_method_qr').checked = true;
             } else {
                 qrCodeDisplay.classList.add('hidden');
+                // Ensure the proper payment method is set when hiding QR code
+                document.getElementById('payment_method_card').checked = true;
             }
         }
 
@@ -133,7 +140,18 @@
         document.addEventListener('DOMContentLoaded', function() {
             if (document.getElementById('payment_method_qr').checked) {
                 toggleQrCode(true);
+            } else {
+                // Default to card payment if nothing is selected
+                document.getElementById('payment_method_card').checked = true;
             }
+            
+            // When a radio button is clicked, update the hidden input with its value
+            document.querySelectorAll('input[name="payment_method"]').forEach(function(radio) {
+                radio.addEventListener('change', function() {
+                    const hiddenInput = document.querySelector('input[type="hidden"][name="payment_method"]');
+                    hiddenInput.value = this.value;
+                });
+            });
         });
     </script>
 </x-app-layout>

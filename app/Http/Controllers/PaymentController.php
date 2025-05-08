@@ -42,6 +42,7 @@ class PaymentController extends Controller
         // Mark service record as completed
         $serviceRecord->update(['is_completed' => true]);
         
+        // Redirect to receipt page after payment is processed
         return redirect()->route('employee.receipt', $payment->id)
             ->with('success', 'Payment processed successfully.');
     }
