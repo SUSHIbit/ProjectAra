@@ -11,6 +11,26 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
+    /**
+     * Main dashboard - redirects based on user role
+     */
+    public function index(Request $request)
+    {
+        $user = $request->user();
+        
+        if ($user->isManager()) {
+            return redirect()->route('manager.dashboard');
+        } elseif ($user->isEmployee()) {
+            return redirect()->route('employee.dashboard');
+        } else {
+            // For public users
+            return view('dashboard');
+        }
+    }
+
+    /**
+     * Employee dashboard
+     */
     public function employeeDashboard(Request $request)
     {
         $user = $request->user();
@@ -27,6 +47,9 @@ class DashboardController extends Controller
         return view('employee.dashboard', compact('user', 'isClockIn', 'clockRecord', 'todayServiceRecords'));
     }
     
+    /**
+     * Manager dashboard
+     */
     public function managerDashboard(Request $request)
     {
         // Count stats

@@ -21,11 +21,16 @@ use Illuminate\Support\Facades\Route;
 // Public routes
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 Route::get('/thank-you', function () {
     return view('thank-you');
 })->name('thank-you');
+
+// Dashboard route - will redirect based on user role
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth'])
+    ->name('dashboard');
 
 // Breeze default routes
 Route::middleware('auth')->group(function () {
